@@ -50,4 +50,25 @@
         android:text="Set Event"
         />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivHasil"
+        />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnGetPhoto"
+        android:text="Ambil Foto"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnBukaMaps"
+        android:text="Buka Maps"
+        />
+
 </LinearLayout>

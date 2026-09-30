@@ -16,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat
 import java.util.TimeZone
 import android.app.TimePickerDialog // Tambahkan ini
 import android.provider.CalendarContract // Tambahkan ini
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -130,5 +132,59 @@ class MainActivity : AppCompatActivity() {
 
             datePickerDialog.show()
         }
+
+        var ivHasil = findViewById<ImageView>(R.id.ivHasil)
+
+        val cameraLauncher = registerForActivityResult(
+            ActivityResultContracts.TakePicturePreview()
+        ){ bitmap ->
+            if (bitmap != null){
+                ivHasil.setImageBitmap(bitmap)
+            }
+        }
+        var getPhoto = findViewById<Button>(R.id.btnGetPhoto)
+
+        getPhoto.setOnClickListener {
+            cameraLauncher.launch(null)
+        }
+
+        var bukaMaps = findViewById<Button>(R.id.btnBukaMaps)
+        bukaMaps.setOnClickListener {
+            val latitude = "-7.24611"
+            val longitude = "112.73750"
+            val labelTempat = "Tugu Pahlawan"
+
+            val gmnIntentUri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude($labelTempat)")
+
+            var mapIntent = Intent(Intent.ACTION_VIEW, gmnIntentUri).apply{
+                setPackage("com.google.android.apps.maps")
+            }
+
+            if(mapIntent.resolveActivity(packageManager) != null){
+                startActivity(mapIntent)
+            }else{
+                Toast.makeText(
+                    this,
+                    "Tidak ada aplikasi maps ditemukan",
+                    Toast.LENGTH_SHORT).show()
+
+                val webUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=$latitude,$longitude")
+                val webIntent = Intent(Intent.ACTION_VIEW, webUri)
+
+                try{
+                    startActivity(webIntent)
+                }catch (e2 : Exception){
+                    Toast.makeText(
+                        this,
+                        "Tidak bisa membuka maps",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+
+
+        }
+
     }
 }
